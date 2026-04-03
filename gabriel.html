@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arena das Teclas</title>
+  <style>
+    :root {
+      --bg-top: #17324d;
+      --bg-bottom: #0c1728;
+      --panel: rgba(255, 250, 240, 0.14);
+      --panel-border: rgba(255, 240, 215, 0.28);
+      --text: #fff6e6;
+      --accent: #ffb347;
+      --accent-2: #ffd166;
+      --danger: #ff6b57;
+      --safe: #79d98c;
+      --shadow: rgba(6, 16, 28, 0.38);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: "Trebuchet MS", "Verdana", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(255, 179, 71, 0.18), transparent 24%),
+        radial-gradient(circle at 85% 15%, rgba(121, 217, 140, 0.14), transparent 20%),
+        linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+      overflow: hidden;
+    }
+
+    .game-shell {
+      width: min(94vw, 980px);
+      padding: 20px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow:
+        0 24px 80px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(10px);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .title-group h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .title-group p {
+      margin: 6px 0 0;
+      font-size: 0.98rem;
+      color: rgba(255, 246, 230, 0.85);
+    }
+
+    .stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      min-width: 116px;
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .stat-label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .play-area {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 240, 215, 0.16);
+      box-shadow: 0 18px 50px rgba(6, 16, 28, 0.35);
+      background: linear-gradient(180deg, rgba(8, 24, 44, 0.5), rgba(5, 12, 22, 0.72));
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      background:
+        radial-gradient(circle at 30% 18%, rgba(255, 208, 128, 0.06), transparent 30%),
+        linear-gradient(180deg, #14253b, #09131f);
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, rgba(9, 19, 31, 0.22), rgba(9, 19, 31, 0.64));
+      text-align: center;
+      padding: 20px;
+      transition: opacity 180ms ease;
+      pointer-events: none;
+    }
+
+    .overlay.hidden {
+      opacity: 0;
+    }
+
+    .overlay-card {
+      width: min(92%, 540px);
+      padding: 24px;
+      border-radius: 24px;
+      background: rgba(13, 26, 42, 0.88);
+      border: 1px solid rgba(255, 235, 205, 0.14);
+      box-shadow: 0 18px 56px rgba(0, 0, 0, 0.35);
+    }
+
+    .overlay h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: var(--accent-2);
+    }
+
+    .overlay p {
+      margin: 8px 0;
+      line-height: 1.5;
+      color: rgba(255, 246, 230, 0.88);
+    }
+
+    .kbd-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 14px 0;
+    }
+
+    kbd {
+      padding: 7px 11px;
+      border-radius: 10px;
+      font: inherit;
+      font-weight: 700;
+      color: #12233a;
+      background: linear-gradient(180deg, #fff5d9, #f0cf80);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        0 6px 14px rgba(0, 0, 0, 0.18);
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      color: rgba(255, 246, 230, 0.74);
+      font-size: 0.92rem;
+    }
+
+    .pulse {
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.04);
+      }
+    }
+
+    @media (max-width: 720px) {
+      .game-shell {
+        padding: 14px;
+        border-radius: 22px;
+      }
+
+      .header {
+        margin-bottom: 12px;
+      }
+
+      .stat {
+        min-width: calc(50% - 6px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="game-shell">
+    <section class="header">
+      <div class="title-group">
+        <h1>Arena das Teclas</h1>
+        <p>Colete estrelas, desvie dos monstros e sobreviva usando apenas o teclado.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-label">Pontos</span>
+          <span class="stat-value" id="score">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Vida</span>
+          <span class="stat-value" id="health">3</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Nível</span>
+          <span class="stat-value" id="level">1</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Tempo</span>
+          <span class="stat-value" id="time">60</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="play-area">
+      <canvas id="game" width="960" height="540"></canvas>
+
+      <div class="overlay" id="overlay">
+        <div class="overlay-card">
+          <h2 class="pulse" id="overlay-title">Pronto para jogar?</h2>
+          <p id="overlay-text">Pegue as estrelas douradas, fuja dos monstros laranja e use o turbo para respirar quando a arena apertar.</p>
+
+          <div class="kbd-row">
+            <kbd>W</kbd>
+            <kbd>A</kbd>
+            <kbd>S</kbd>
+            <kbd>D</kbd>
+            <kbd>Setas</kbd>
+            <span>mover</span>
+          </div>
+
+          <div class="kbd-row">
+            <kbd>Espaço</kbd>
+            <span>turbo</span>
+            <kbd>Enter</kbd>
+            <span>começar / reiniciar</span>
+          </div>
+
+          <p>Você ganha 10 pontos por estrela. A cada 50 pontos, o nível sobe e os inimigos ficam mais rápidos.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer">
+      <span>Controles no teclado: `WASD` ou setas.</span>
+      <span>Pressione `Enter` para começar.</span>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    const scoreEl = document.getElementById("score");
+    const healthEl = document.getElementById("health");
+    const levelEl = document.getElementById("level");
+    const timeEl = document.getElementById("time");
+    const overlay = document.getElementById("overlay");
+    const overlayTitle = document.getElementById("overlay-title");
+    const overlayText = document.getElementById("overlay-text");
+
+    const world = {
+      width: canvas.width,
+      height: canvas.height,
+      state: "menu",
+      keys: {},
+      score: 0,
+      health: 3,
+      level: 1,
+      remainingTime: 60,
+      bonusTime: 0,
+      startTime: 0,
+      lastFrame: 0,
+      enemyTimer: 0,
+      collectibleTimer: 0,
+      particleTimer: 0,
+      hitFlash: 0,
+      stars: [],
+      enemies: [],
+      particles: [],
+      player: null
+    };
+
+    function resetGame() {
+      world.state = "playing";
+      world.score = 0;
+      world.health = 3;
+      world.level = 1;
+      world.remainingTime = 60;
+      world.bonusTime = 0;
+      world.startTime = performance.now();
+      world.lastFrame = performance.now();
+      world.enemyTimer = 0;
+      world.collectibleTimer = 0;
+      world.particleTimer = 0;
+      world.hitFlash = 0;
+      world.stars = [];
+      world.enemies = [];
+      world.particles = [];
+      world.player = {
+        x: world.width / 2,
+        y: world.height / 2,
+        radius: 18,
+        speed: 280,
+        turboCooldown: 0,
+        turboTrail: 0,
+        facing: { x: 1, y: 0 },
+        invulnerable: 0
+      };
+
+      for (let i = 0; i < 4; i += 1) {
+        spawnCollectible();
+      }
+
+      for (let i = 0; i < 3; i += 1) {
+        spawnEnemy(true);
+      }
+
+      hideOverlay();
+      syncStats();
+    }
+
+    function syncStats() {
+      scoreEl.textContent = world.score;
+      healthEl.textContent = world.health;
+      levelEl.textContent = world.level;
+      timeEl.textContent = Math.max(0, Math.ceil(world.remainingTime));
+    }
+
+    function showOverlay(title, text) {
+      overlayTitle.textContent = title;
+      overlayText.textContent = text;
+      overlay.classList.remove("hidden");
+    }
+
+    function hideOverlay() {
+      overlay.classList.add("hidden");
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function randomBetween(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function spawnCollectible() {
+      world.stars.push({
+        x: randomBetween(40, world.width - 40),
+        y: randomBetween(50, world.height - 40),
+        radius: 12,
+        glow: randomBetween(0, Math.PI * 2)
+      });
+    }
+
+    function spawnEnemy(initial = false) {
+      const edge = Math.floor(Math.random() * 4);
+      let x = 0;
+      let y = 0;
+      const margin = 26;
+
+      if (edge === 0) {
+        x = randomBetween(0, world.width);
+        y = -margin;
+      } else if (edge === 1) {
+        x = world.width + margin;
+        y = randomBetween(0, world.height);
+      } else if (edge === 2) {
+        x = randomBetween(0, world.width);
+        y = world.height + margin;
+      } else {
+        x = -margin;
+        y = randomBetween(0, world.height);
+      }
+
+      world.enemies.push({
+        x,
+        y,
+        radius: initial ? 18 : randomBetween(16, 24),
+        speed: randomBetween(70, 110) + world.level * 10,
+        wobble: randomBetween(0, Math.PI * 2)
+      });
+    }
+
+    function addParticles(x, y, color, count, spread) {
+      for (let i = 0; i < count; i += 1) {
+        world.particles.push({
+          x,
+          y,
+          dx: randomBetween(-spread, spread),
+          dy: randomBetween(-spread, spread),
+          radius: randomBetween(2, 5),
+          life: randomBetween(0.3, 0.8),
+          color
+        });
+      }
+    }
+
+    function updatePlayer(delta) {
+      const player = world.player;
+      let moveX = 0;
+      let moveY = 0;
+
+      if (world.keys.ArrowUp || world.keys.w || world.keys.W) moveY -= 1;
+      if (world.keys.ArrowDown || world.keys.s || world.keys.S) moveY += 1;
+      if (world.keys.ArrowLeft || world.keys.a || world.keys.A) moveX -= 1;
+      if (world.keys.ArrowRight || world.keys.d || world.keys.D) moveX += 1;
+
+      const magnitude = Math.hypot(moveX, moveY) || 1;
+      moveX /= magnitude;
+      moveY /= magnitude;
+
+      if (moveX !== 0 || moveY !== 0) {
+        player.facing.x = moveX;
+        player.facing.y = moveY;
+      }
+
+      let speed = player.speed;
+
+      if ((world.keys[" "] || world.keys.Spacebar) && player.turboCooldown <= 0) {
+        player.turboTrail = 0.22;
+        player.turboCooldown = 0.85;
+      }
+
+      if (player.turboTrail > 0) {
+        speed = 440;
+      }
+
+      player.x += moveX * speed * delta;
+      player.y += moveY * speed * delta;
+      player.x = clamp(player.x, player.radius, world.width - player.radius);
+      player.y = clamp(player.y, player.radius, world.height - player.radius);
+
+      player.turboCooldown = Math.max(0, player.turboCooldown - delta);
+      player.turboTrail = Math.max(0, player.turboTrail - delta);
+      player.invulnerable = Math.max(0, player.invulnerable - delta);
+
+      if (player.turboTrail > 0) {
+        addParticles(player.x, player.y, "#ffd166", 1, 60);
+      }
+    }
+
+    function updateEnemies(delta) {
+      const player = world.player;
+
+      world.enemies.forEach((enemy) => {
+        const dx = player.x - enemy.x;
+        const dy = player.y - enemy.y;
+        const distance = Math.hypot(dx, dy) || 1;
+        const swayX = Math.cos(enemy.wobble) * 24;
+        const swayY = Math.sin(enemy.wobble) * 24;
+
+        enemy.x += ((dx / distance) * enemy.speed + swayX) * delta;
+        enemy.y += ((dy / distance) * enemy.speed + swayY) * delta;
+        enemy.wobble += delta * 3;
+
+        const combined = enemy.radius + player.radius;
+        const hitDistance = Math.hypot(enemy.x - player.x, enemy.y - player.y);
+
+        if (hitDistance < combined && player.invulnerable <= 0) {
+          world.health -= 1;
+          world.hitFlash = 0.25;
+          player.invulnerable = 1.1;
+          addParticles(player.x, player.y, "#ff6b57", 16, 180);
+
+          if (world.health <= 0) {
+            endGame("Fim de jogo!", "Os monstros dominaram a arena. Pressione Enter para tentar de novo.");
+          }
+        }
+      });
+    }
+
+    function updateCollectibles() {
+      const player = world.player;
+
+      world.stars = world.stars.filter((star) => {
+        star.glow += 0.08;
+        const hitDistance = Math.hypot(star.x - player.x, star.y - player.y);
+
+        if (hitDistance < star.radius + player.radius) {
+          world.score += 10;
+          addParticles(star.x, star.y, "#ffd166", 14, 140);
+
+          const nextLevel = Math.floor(world.score / 50) + 1;
+          if (nextLevel > world.level) {
+            world.level = nextLevel;
+            world.bonusTime += 8;
+            addParticles(player.x, player.y, "#79d98c", 20, 150);
+          }
+
+          return false;
+        }
+
+        return true;
+      });
+    }
+
+    function updateParticles(delta) {
+      world.particles = world.particles.filter((particle) => {
+        particle.x += particle.dx * delta;
+        particle.y += particle.dy * delta;
+        particle.life -= delta;
+        particle.radius *= 0.985;
+        return particle.life > 0.05;
+      });
+    }
+
+    function endGame(title, text) {
+      world.state = "ended";
+      showOverlay(title, text);
+    }
+
+    function update(delta, now) {
+      if (world.state !== "playing") {
+        return;
+      }
+
+      world.remainingTime = 60 - (now - world.startTime) / 1000 + world.bonusTime;
+
+      if (world.remainingTime <= 0) {
+        endGame("Tempo esgotado!", "Você segurou a arena até o relógio zerar. Pressione Enter para jogar outra vez.");
+        world.remainingTime = 0;
+      }
+
+      world.enemyTimer += delta;
+      world.collectibleTimer += delta;
+      world.particleTimer += delta;
+      world.hitFlash = Math.max(0, world.hitFlash - delta);
+
+      updatePlayer(delta);
+      updateEnemies(delta);
+      updateCollectibles();
+      updateParticles(delta);
+
+      const maxStars = 5;
+      const spawnRate = Math.max(0.85, 2.1 - world.level * 0.12);
+      const enemyRate = Math.max(0.7, 2.2 - world.level * 0.15);
+
+      if (world.stars.length < maxStars && world.collectibleTimer >= spawnRate) {
+        world.collectibleTimer = 0;
+        spawnCollectible();
+      }
+
+      if (world.enemyTimer >= enemyRate) {
+        world.enemyTimer = 0;
+        spawnEnemy();
+      }
+
+      syncStats();
+    }
+
+    function drawBackground(now) {
+      ctx.clearRect(0, 0, world.width, world.height);
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, world.height);
+      gradient.addColorStop(0, "#17304c");
+      gradient.addColorStop(1, "#0b1421");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, world.width, world.height);
+
+      ctx.save();
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+      ctx.lineWidth = 1;
+
+      for (let x = 0; x <= world.width; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, world.height);
+        ctx.stroke();
+      }
+
+      for (let y = 0; y <= world.height; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(world.width, y);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      for (let i = 0; i < 28; i += 1) {
+        const offset = (now * 0.02 + i * 71) % world.width;
+        const y = (i * 19) % world.height;
+        ctx.fillStyle = "rgba(255, 245, 220, 0.18)";
+        ctx.fillRect(offset, y, 2, 2);
+      }
+    }
+
+    function drawPlayer() {
+      const player = world.player;
+      if (!player) return;
+
+      ctx.save();
+      ctx.translate(player.x, player.y);
+
+      if (player.invulnerable > 0 && Math.floor(player.invulnerable * 12) % 2 === 0) {
+        ctx.globalAlpha = 0.45;
+      }
+
+      ctx.rotate(Math.atan2(player.facing.y, player.facing.x));
+
+      const glow = ctx.createRadialGradient(0, 0, 5, 0, 0, 40);
+      glow.addColorStop(0, "rgba(255, 209, 102, 0.55)");
+      glow.addColorStop(1, "rgba(255, 209, 102, 0)");
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(0, 0, 40, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#ffd166";
+      ctx.beginPath();
+      ctx.moveTo(22, 0);
+      ctx.lineTo(-14, -14);
+      ctx.lineTo(-7, 0);
+      ctx.lineTo(-14, 14);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = "#fff7e8";
+      ctx.beginPath();
+      ctx.arc(4, 0, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawEnemies(now) {
+      world.enemies.forEach((enemy) => {
+        ctx.save();
+        ctx.translate(enemy.x, enemy.y);
+        const pulse = Math.sin(now * 0.004 + enemy.wobble) * 3;
+
+        const glow = ctx.createRadialGradient(0, 0, 5, 0, 0, enemy.radius + 18);
+        glow.addColorStop(0, "rgba(255, 107, 87, 0.58)");
+        glow.addColorStop(1, "rgba(255, 107, 87, 0)");
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, 0, enemy.radius + 18, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#ff7f50";
+        ctx.beginPath();
+        ctx.arc(0, 0, enemy.radius + pulse * 0.16, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#fff2d8";
+        ctx.beginPath();
+        ctx.arc(-5, -3, 3, 0, Math.PI * 2);
+        ctx.arc(5, -3, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+
+    function drawCollectibles(now) {
+      world.stars.forEach((star) => {
+        ctx.save();
+        ctx.translate(star.x, star.y);
+        ctx.rotate(now * 0.001 + star.glow);
+        const scale = 1 + Math.sin(star.glow) * 0.08;
+        ctx.scale(scale, scale);
+
+        const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, 26);
+        glow.addColorStop(0, "rgba(255, 209, 102, 0.55)");
+        glow.addColorStop(1, "rgba(255, 209, 102, 0)");
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, 0, 26, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#ffd166";
+        ctx.beginPath();
+        ctx.moveTo(0, -14);
+        ctx.lineTo(4, -4);
+        ctx.lineTo(14, 0);
+        ctx.lineTo(4, 4);
+        ctx.lineTo(0, 14);
+        ctx.lineTo(-4, 4);
+        ctx.lineTo(-14, 0);
+        ctx.lineTo(-4, -4);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+
+    function drawParticles() {
+      world.particles.forEach((particle) => {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, particle.life);
+        ctx.fillStyle = particle.color;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+
+    function drawDangerFrame() {
+      if (world.hitFlash <= 0) return;
+      ctx.save();
+      ctx.fillStyle = `rgba(255, 107, 87, ${world.hitFlash * 0.35})`;
+      ctx.fillRect(0, 0, world.width, world.height);
+      ctx.restore();
+    }
+
+    function drawMiniGuide() {
+      ctx.save();
+      ctx.fillStyle = "rgba(12, 21, 33, 0.48)";
+      ctx.fillRect(18, world.height - 54, 238, 34);
+      ctx.strokeStyle = "rgba(255, 240, 215, 0.16)";
+      ctx.strokeRect(18, world.height - 54, 238, 34);
+      ctx.fillStyle = "rgba(255, 246, 230, 0.86)";
+      ctx.font = "16px Trebuchet MS";
+      ctx.fillText("WASD/Setas = mover   Espaço = turbo", 28, world.height - 31);
+      ctx.restore();
+    }
+
+    function render(now) {
+      drawBackground(now);
+      drawCollectibles(now);
+      drawEnemies(now);
+      drawParticles();
+      drawPlayer();
+      drawMiniGuide();
+      drawDangerFrame();
+    }
+
+    function loop(now) {
+      const delta = Math.min(0.032, (now - world.lastFrame) / 1000 || 0);
+      world.lastFrame = now;
+      update(delta, now);
+      render(now);
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener("keydown", (event) => {
+      world.keys[event.key] = true;
+
+      if (event.key === "Enter") {
+        resetGame();
+      }
+
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(event.key)) {
+        event.preventDefault();
+      }
+    });
+
+    window.addEventListener("keyup", (event) => {
+      world.keys[event.key] = false;
+    });
+
+    showOverlay(
+      "Pronto para jogar?",
+      "Colete estrelas, fuja dos monstros e sobreviva o máximo que puder. Pressione Enter para começar."
+    );
+    syncStats();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
