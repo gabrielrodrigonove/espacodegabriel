@@ -3,19 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arena das Teclas</title>
+  <title>Espaço de Gabriel</title>
   <style>
     :root {
-      --bg-top: #17324d;
-      --bg-bottom: #0c1728;
-      --panel: rgba(255, 250, 240, 0.14);
-      --panel-border: rgba(255, 240, 215, 0.28);
-      --text: #fff6e6;
-      --accent: #ffb347;
-      --accent-2: #ffd166;
-      --danger: #ff6b57;
-      --safe: #79d98c;
-      --shadow: rgba(6, 16, 28, 0.38);
+      --bg-top: #b9d0d4;
+      --bg-bottom: #738d93;
+      --shell-top: #9cc1af;
+      --shell-bottom: #6e8f84;
+      --panel: rgba(235, 245, 224, 0.14);
+      --panel-border: rgba(232, 244, 214, 0.28);
+      --text: #eef5db;
+      --accent: #d34c64;
+      --accent-2: #f3f0b8;
+      --danger: #e85c4a;
+      --safe: #8fd36b;
+      --shadow: rgba(34, 48, 55, 0.32);
+      --screen-bezel: #33454a;
+      --screen-bg: #9aa76e;
+      --button-a: #c25d86;
+      --button-b: #8c4f96;
+      --button-c: #4f6170;
     }
 
     * {
@@ -30,22 +37,36 @@
       font-family: "Trebuchet MS", "Verdana", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top, rgba(255, 179, 71, 0.18), transparent 24%),
-        radial-gradient(circle at 85% 15%, rgba(121, 217, 140, 0.14), transparent 20%),
+        radial-gradient(circle at top, rgba(243, 240, 184, 0.32), transparent 26%),
+        radial-gradient(circle at 82% 16%, rgba(111, 143, 132, 0.18), transparent 24%),
         linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     .game-shell {
-      width: min(94vw, 980px);
-      padding: 20px;
-      border-radius: 28px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      width: min(98vw, 1220px);
+      padding: 18px 18px 22px;
+      border-radius: 36px 36px 56px 56px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 16%),
+        linear-gradient(180deg, var(--shell-top), var(--shell-bottom));
+      border: 1px solid rgba(245, 253, 229, 0.28);
       box-shadow:
         0 24px 80px var(--shadow),
-        inset 0 1px 0 rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(10px);
+        inset 0 2px 0 rgba(255, 255, 255, 0.34),
+        inset 0 -10px 24px rgba(36, 49, 56, 0.16);
+      position: relative;
+    }
+
+    .game-shell::before {
+      content: "Nintendo Game Boy Color style";
+      display: block;
+      margin-bottom: 6px;
+      text-align: center;
+      font-size: 0.74rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(30, 44, 48, 0.76);
     }
 
     .header {
@@ -53,38 +74,50 @@
       justify-content: space-between;
       gap: 16px;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       flex-wrap: wrap;
     }
 
     .title-group h1 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 3.3rem);
-      letter-spacing: 0.04em;
+      margin: 4px 0 0;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--accent-2);
-      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      color: #2a4045;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.22);
     }
 
     .title-group p {
-      margin: 6px 0 0;
-      font-size: 0.98rem;
-      color: rgba(255, 246, 230, 0.85);
+      margin: 4px 0 0;
+      font-size: 0.92rem;
+      color: rgba(35, 49, 54, 0.82);
+      max-width: 620px;
+    }
+
+    .console-strip {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #eff6dd;
+      background: linear-gradient(90deg, #6f557d, #bf4f6d);
     }
 
     .stats {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
     .stat {
-      min-width: 116px;
-      padding: 10px 14px;
+      min-width: 108px;
+      padding: 8px 12px;
       border-radius: 16px;
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      background: rgba(42, 61, 66, 0.14);
+      border: 1px solid rgba(41, 59, 63, 0.2);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
     }
 
     .stat-label {
@@ -92,22 +125,28 @@
       font-size: 0.72rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      opacity: 0.75;
+      color: rgba(33, 47, 51, 0.75);
       margin-bottom: 4px;
     }
 
     .stat-value {
-      font-size: 1.35rem;
+      font-size: 1.2rem;
       font-weight: 700;
+      color: #203137;
     }
 
     .play-area {
       position: relative;
-      border-radius: 24px;
+      border-radius: 18px;
       overflow: hidden;
-      border: 1px solid rgba(255, 240, 215, 0.16);
-      box-shadow: 0 18px 50px rgba(6, 16, 28, 0.35);
-      background: linear-gradient(180deg, rgba(8, 24, 44, 0.5), rgba(5, 12, 22, 0.72));
+      padding: 8px;
+      border: 2px solid rgba(236, 245, 223, 0.18);
+      box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.12),
+        0 18px 30px rgba(24, 34, 39, 0.22);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 12%),
+        linear-gradient(180deg, #40525a, var(--screen-bezel));
     }
 
     canvas {
@@ -115,9 +154,11 @@
       width: 100%;
       height: auto;
       aspect-ratio: 16 / 9;
+      touch-action: none;
+      border-radius: 8px;
       background:
-        radial-gradient(circle at 30% 18%, rgba(255, 208, 128, 0.06), transparent 30%),
-        linear-gradient(180deg, #14253b, #09131f);
+        radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 0.08), transparent 30%),
+        linear-gradient(180deg, #9aa76e, #5e6f49);
     }
 
     .overlay {
@@ -129,19 +170,20 @@
       text-align: center;
       padding: 20px;
       transition: opacity 180ms ease;
-      pointer-events: none;
+      pointer-events: auto;
     }
 
     .overlay.hidden {
       opacity: 0;
+      pointer-events: none;
     }
 
     .overlay-card {
       width: min(92%, 540px);
       padding: 24px;
       border-radius: 24px;
-      background: rgba(13, 26, 42, 0.88);
-      border: 1px solid rgba(255, 235, 205, 0.14);
+      background: rgba(25, 38, 43, 0.92);
+      border: 1px solid rgba(232, 244, 214, 0.18);
       box-shadow: 0 18px 56px rgba(0, 0, 0, 0.35);
     }
 
@@ -177,14 +219,184 @@
         0 6px 14px rgba(0, 0, 0, 0.18);
     }
 
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
+    .start-btn,
+    .control-btn {
+      border: 0;
+      cursor: pointer;
+      color: var(--text);
+      font: inherit;
+      font-weight: 700;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    }
+
+    .start-btn {
+      margin-top: 16px;
+      padding: 12px 20px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f3f0b8, #d8d186);
+      color: #22363b;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.75),
+        0 10px 24px rgba(0, 0, 0, 0.24);
+    }
+
+    .start-btn:active,
+    .control-btn:active,
+    .control-btn.pressed {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .mobile-controls {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: end;
+      gap: 18px;
       margin-top: 14px;
-      color: rgba(255, 246, 230, 0.74);
-      font-size: 0.92rem;
+    }
+
+    .touch-panel {
+      padding: 14px;
+      border-radius: 24px;
+      background: rgba(41, 59, 63, 0.08);
+      border: 1px solid rgba(41, 59, 63, 0.1);
+    }
+
+    .mobile-label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(34, 49, 53, 0.82);
+    }
+
+    .pad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 68px);
+      grid-template-areas:
+        ". up ."
+        "left down right";
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .pad-up {
+      grid-area: up;
+    }
+
+    .pad-left {
+      grid-area: left;
+    }
+
+    .pad-down {
+      grid-area: down;
+    }
+
+    .pad-right {
+      grid-area: right;
+    }
+
+    .action-cluster {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      transform: rotate(-18deg);
+      margin-top: 12px;
+    }
+
+    .system-buttons {
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+      align-self: center;
+      padding-bottom: 10px;
+    }
+
+    .control-btn {
+      min-width: 68px;
+      min-height: 56px;
+      padding: 12px 16px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(245, 252, 230, 0.18), rgba(255, 255, 255, 0.04));
+      border: 1px solid rgba(35, 50, 54, 0.18);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 10px 18px rgba(0, 0, 0, 0.1);
+      color: #213338;
+    }
+
+    .control-btn.pressed {
+      background: linear-gradient(180deg, rgba(243, 240, 184, 0.34), rgba(216, 209, 134, 0.18));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 6px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    .dpad-panel {
+      justify-self: start;
+    }
+
+    .action-panel {
+      justify-self: end;
+      min-width: 260px;
+    }
+
+    .action-btn {
+      min-width: 74px;
+      min-height: 74px;
+      border-radius: 999px;
+      font-size: 1.25rem;
+      color: #f7f0e7;
+      box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.16),
+        0 12px 18px rgba(0, 0, 0, 0.16);
+    }
+
+    .button-a {
+      background: linear-gradient(180deg, #d56c97, var(--button-a));
+    }
+
+    .button-b {
+      background: linear-gradient(180deg, #a265ac, var(--button-b));
+    }
+
+    .button-c {
+      background: linear-gradient(180deg, #647686, var(--button-c));
+    }
+
+    .system-btn {
+      min-width: 112px;
+      min-height: 38px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: linear-gradient(180deg, #566b72, #3a4f54);
+      color: #eef5db;
+    }
+
+    .action-hint {
+      margin: 12px 0 0;
+      text-align: center;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(34, 49, 53, 0.82);
+    }
+
+    .footer {
+      justify-content: center;
+      margin-top: 12px;
+      color: rgba(31, 45, 49, 0.76);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
     }
 
     .pulse {
@@ -200,18 +412,56 @@
       }
     }
 
+    @media (max-width: 900px), (pointer: coarse) {
+      body {
+        display: block;
+        padding: 8px 4px 14px;
+      }
+
+      .game-shell {
+        width: min(100%, 1220px);
+        margin: 0 auto;
+      }
+
+      .mobile-controls {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
     @media (max-width: 720px) {
       .game-shell {
-        padding: 14px;
+        padding: 12px;
         border-radius: 22px;
       }
 
       .header {
-        margin-bottom: 12px;
+        margin-bottom: 8px;
       }
 
       .stat {
         min-width: calc(50% - 6px);
+      }
+
+      .mobile-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .pad-grid {
+        grid-template-columns: repeat(3, minmax(58px, 68px));
+      }
+
+      .control-btn {
+        min-width: 58px;
+        min-height: 52px;
+      }
+
+      .action-panel,
+      .dpad-panel {
+        justify-self: stretch;
+      }
+
+      .action-cluster {
+        justify-content: center;
       }
     }
   </style>
@@ -220,8 +470,9 @@
   <main class="game-shell">
     <section class="header">
       <div class="title-group">
-        <h1>Arena das Teclas</h1>
-        <p>Colete estrelas, desvie dos monstros e sobreviva usando apenas o teclado.</p>
+        <span class="console-strip">Handheld Color</span>
+        <h1>Espaço de Gabriel</h1>
+        <p>Colete estrelas, atravesse uma arena infinita e sobreviva com direcional e botoes no estilo Game Boy.</p>
       </div>
 
       <div class="stats">
@@ -241,41 +492,75 @@
           <span class="stat-label">Tempo</span>
           <span class="stat-value" id="time">60</span>
         </div>
+        <div class="stat">
+          <span class="stat-label">Arma</span>
+          <span class="stat-value" id="weapon">Blaster</span>
+        </div>
       </div>
     </section>
 
     <section class="play-area">
-      <canvas id="game" width="960" height="540"></canvas>
+      <canvas id="game" width="1280" height="720"></canvas>
 
       <div class="overlay" id="overlay">
         <div class="overlay-card">
           <h2 class="pulse" id="overlay-title">Pronto para jogar?</h2>
-          <p id="overlay-text">Pegue as estrelas douradas, fuja dos monstros laranja e use o turbo para respirar quando a arena apertar.</p>
+          <p id="overlay-text">Pegue as estrelas douradas, explore a arena infinita, recolha as armas espalhadas pelo caminho e derrube os monstros laranja.</p>
 
           <div class="kbd-row">
-            <kbd>W</kbd>
-            <kbd>A</kbd>
-            <kbd>S</kbd>
-            <kbd>D</kbd>
             <kbd>Setas</kbd>
             <span>mover</span>
           </div>
 
           <div class="kbd-row">
-            <kbd>Espaço</kbd>
+            <kbd>A</kbd>
+            <span>atirar</span>
+            <kbd>B</kbd>
             <span>turbo</span>
+            <kbd>C</kbd>
+            <span>trocar arma</span>
+          </div>
+
+          <div class="kbd-row">
             <kbd>Enter</kbd>
             <span>começar / reiniciar</span>
           </div>
 
-          <p>Você ganha 10 pontos por estrela. A cada 50 pontos, o nível sobe e os inimigos ficam mais rápidos.</p>
+          <p>Você ganha 10 pontos por estrela e 20 por monstro derrotado. As caixas de arma ficam espalhadas pelo mapa e trocam seu disparo quando você encosta nelas.</p>
+          <button class="start-btn" id="start-button" type="button">Começar</button>
         </div>
       </div>
     </section>
 
+    <section class="mobile-controls" aria-label="Controles para celular">
+      <div class="touch-panel dpad-panel">
+        <span class="mobile-label">Mover</span>
+        <div class="pad-grid">
+          <button class="control-btn pad-up" type="button" data-hold-key="ArrowUp">▲</button>
+          <button class="control-btn pad-left" type="button" data-hold-key="ArrowLeft">◀</button>
+          <button class="control-btn pad-down" type="button" data-hold-key="ArrowDown">▼</button>
+          <button class="control-btn pad-right" type="button" data-hold-key="ArrowRight">▶</button>
+        </div>
+      </div>
+
+      <div class="system-buttons">
+        <button class="control-btn system-btn" id="start-touch" type="button">Start</button>
+        <button class="control-btn system-btn" id="select-touch" type="button">Select</button>
+      </div>
+
+      <div class="touch-panel action-panel">
+        <span class="mobile-label">ABC</span>
+        <div class="action-cluster">
+          <button class="control-btn action-btn button-b" type="button" data-hold-key="b">B</button>
+          <button class="control-btn action-btn button-a" type="button" data-hold-key="a">A</button>
+          <button class="control-btn action-btn button-c" type="button" id="cycle-button">C</button>
+        </div>
+        <p class="action-hint">A tiro  B turbo  C troca arma</p>
+      </div>
+    </section>
+
     <section class="footer">
-      <span>Controles no teclado: `WASD` ou setas.</span>
-      <span>Pressione `Enter` para começar.</span>
+      <span>Setas movem. A atira. B usa turbo. C troca arma. Enter ou Start reinicia.</span>
     </section>
   </main>
 
@@ -287,27 +572,79 @@
     const healthEl = document.getElementById("health");
     const levelEl = document.getElementById("level");
     const timeEl = document.getElementById("time");
+    const weaponEl = document.getElementById("weapon");
+    const startButton = document.getElementById("start-button");
+    const startTouchButton = document.getElementById("start-touch");
+    const selectTouchButton = document.getElementById("select-touch");
+    const cycleButton = document.getElementById("cycle-button");
     const overlay = document.getElementById("overlay");
     const overlayTitle = document.getElementById("overlay-title");
     const overlayText = document.getElementById("overlay-text");
+    const holdButtons = Array.from(document.querySelectorAll("[data-hold-key]"));
+
+    const WEAPONS = {
+      blaster: {
+        name: "Blaster",
+        color: "#fff7e8",
+        glow: "rgba(255, 247, 232, 0.95)",
+        trail: "rgba(255, 247, 232, 0.24)",
+        particleColor: "#fff7e8",
+        cooldown: 0.18,
+        shots: [{ angle: 0, speed: 620, life: 0.9, radius: 6, hitsLeft: 1 }]
+      },
+      spread: {
+        name: "Espalhadora",
+        color: "#ffd166",
+        glow: "rgba(255, 209, 102, 0.95)",
+        trail: "rgba(255, 209, 102, 0.24)",
+        particleColor: "#ffd166",
+        cooldown: 0.42,
+        shots: [
+          { angle: -0.24, speed: 520, life: 0.45, radius: 5, hitsLeft: 1 },
+          { angle: -0.12, speed: 540, life: 0.48, radius: 5, hitsLeft: 1 },
+          { angle: 0, speed: 560, life: 0.5, radius: 6, hitsLeft: 1 },
+          { angle: 0.12, speed: 540, life: 0.48, radius: 5, hitsLeft: 1 },
+          { angle: 0.24, speed: 520, life: 0.45, radius: 5, hitsLeft: 1 }
+        ]
+      },
+      plasma: {
+        name: "Plasma",
+        color: "#79d98c",
+        glow: "rgba(121, 217, 140, 0.92)",
+        trail: "rgba(121, 217, 140, 0.28)",
+        particleColor: "#79d98c",
+        cooldown: 0.62,
+        shots: [{ angle: 0, speed: 760, life: 1.1, radius: 8, hitsLeft: 3 }]
+      }
+    };
+    const WEAPON_ORDER = ["blaster", "spread", "plasma"];
+    const MATCH_DURATION = 60 * 60;
 
     const world = {
       width: canvas.width,
       height: canvas.height,
+      camera: {
+        x: -canvas.width / 2,
+        y: -canvas.height / 2
+      },
       state: "menu",
       keys: {},
+      touchKeys: {},
       score: 0,
       health: 3,
       level: 1,
-      remainingTime: 60,
+      remainingTime: MATCH_DURATION,
       bonusTime: 0,
       startTime: 0,
       lastFrame: 0,
       enemyTimer: 0,
       collectibleTimer: 0,
+      weaponDropTimer: 0,
       particleTimer: 0,
       hitFlash: 0,
       stars: [],
+      weaponDrops: [],
+      bullets: [],
       enemies: [],
       particles: [],
       player: null
@@ -315,33 +652,49 @@
 
     function resetGame() {
       world.state = "playing";
+      world.keys = {};
+      clearTouchKeys();
       world.score = 0;
       world.health = 3;
       world.level = 1;
-      world.remainingTime = 60;
+      world.remainingTime = MATCH_DURATION;
       world.bonusTime = 0;
       world.startTime = performance.now();
       world.lastFrame = performance.now();
       world.enemyTimer = 0;
       world.collectibleTimer = 0;
+      world.weaponDropTimer = 0;
       world.particleTimer = 0;
       world.hitFlash = 0;
       world.stars = [];
+      world.weaponDrops = [];
+      world.bullets = [];
       world.enemies = [];
       world.particles = [];
       world.player = {
-        x: world.width / 2,
-        y: world.height / 2,
+        x: 0,
+        y: 0,
         radius: 18,
         speed: 280,
         turboCooldown: 0,
+        shootCooldown: 0,
         turboTrail: 0,
+        weapon: "blaster",
         facing: { x: 1, y: 0 },
         invulnerable: 0
       };
+      updateCamera();
 
       for (let i = 0; i < 4; i += 1) {
         spawnCollectible();
+      }
+
+      WEAPON_ORDER.forEach((weaponKey) => {
+        spawnWeaponDrop(weaponKey);
+      });
+
+      for (let i = 0; i < 2; i += 1) {
+        spawnWeaponDrop();
       }
 
       for (let i = 0; i < 3; i += 1) {
@@ -356,12 +709,17 @@
       scoreEl.textContent = world.score;
       healthEl.textContent = world.health;
       levelEl.textContent = world.level;
-      timeEl.textContent = Math.max(0, Math.ceil(world.remainingTime));
+      const totalSeconds = Math.max(0, Math.ceil(world.remainingTime));
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
+      timeEl.textContent = `${minutes}:${seconds}`;
+      weaponEl.textContent = world.player ? WEAPONS[world.player.weapon].name : "-";
     }
 
-    function showOverlay(title, text) {
+    function showOverlay(title, text, buttonLabel = "Começar") {
       overlayTitle.textContent = title;
       overlayText.textContent = text;
+      startButton.textContent = buttonLabel;
       overlay.classList.remove("hidden");
     }
 
@@ -377,33 +735,120 @@
       return Math.random() * (max - min) + min;
     }
 
+    function keyPressed(...keys) {
+      return keys.some((key) => world.keys[key] || world.touchKeys[key]);
+    }
+
+    function resolveTouchKey(key) {
+      return key === "Space" ? " " : key;
+    }
+
+    function setTouchKey(key, isPressed) {
+      world.touchKeys[resolveTouchKey(key)] = isPressed;
+    }
+
+    function clearTouchKeys() {
+      world.touchKeys = {};
+      holdButtons.forEach((button) => button.classList.remove("pressed"));
+    }
+
+    function updateCamera() {
+      if (!world.player) return;
+      world.camera.x = world.player.x - world.width / 2;
+      world.camera.y = world.player.y - world.height / 2;
+    }
+
+    function worldToScreen(x, y) {
+      return {
+        x: x - world.camera.x,
+        y: y - world.camera.y
+      };
+    }
+
+    function isVisible(x, y, radius = 0, margin = 80) {
+      const screen = worldToScreen(x, y);
+      return (
+        screen.x >= -margin - radius &&
+        screen.x <= world.width + margin + radius &&
+        screen.y >= -margin - radius &&
+        screen.y <= world.height + margin + radius
+      );
+    }
+
+    function distanceToPlayer(x, y) {
+      if (!world.player) return 0;
+      return Math.hypot(x - world.player.x, y - world.player.y);
+    }
+
+    function randomAroundPlayer(minDistance, maxDistance) {
+      const baseX = world.player ? world.player.x : 0;
+      const baseY = world.player ? world.player.y : 0;
+      const angle = randomBetween(0, Math.PI * 2);
+      const distance = randomBetween(minDistance, maxDistance);
+
+      return {
+        x: baseX + Math.cos(angle) * distance,
+        y: baseY + Math.sin(angle) * distance
+      };
+    }
+
+    function pruneFarObjects() {
+      const starDistance = Math.max(world.width, world.height) * 1.5;
+      const weaponDistance = Math.max(world.width, world.height) * 1.7;
+      const enemyDistance = Math.max(world.width, world.height) * 1.8;
+
+      world.stars = world.stars.filter((star) => distanceToPlayer(star.x, star.y) < starDistance);
+      world.weaponDrops = world.weaponDrops.filter((drop) => distanceToPlayer(drop.x, drop.y) < weaponDistance);
+      world.enemies = world.enemies.filter((enemy) => distanceToPlayer(enemy.x, enemy.y) < enemyDistance);
+    }
+
     function spawnCollectible() {
+      const position = randomAroundPlayer(120, Math.max(world.width, world.height) * 0.55);
+
       world.stars.push({
-        x: randomBetween(40, world.width - 40),
-        y: randomBetween(50, world.height - 40),
+        x: position.x,
+        y: position.y,
         radius: 12,
         glow: randomBetween(0, Math.PI * 2)
       });
     }
 
+    function spawnWeaponDrop(forcedWeapon = null) {
+      const weaponKey = forcedWeapon || WEAPON_ORDER[Math.floor(Math.random() * WEAPON_ORDER.length)];
+      const position = randomAroundPlayer(180, Math.max(world.width, world.height) * 0.7);
+
+      world.weaponDrops.push({
+        x: position.x,
+        y: position.y,
+        radius: 18,
+        weapon: weaponKey,
+        bob: randomBetween(0, Math.PI * 2),
+        spin: randomBetween(0, Math.PI * 2)
+      });
+    }
+
     function spawnEnemy(initial = false) {
       const edge = Math.floor(Math.random() * 4);
+      const baseX = world.player ? world.player.x : 0;
+      const baseY = world.player ? world.player.y : 0;
+      const halfWidth = world.width / 2;
+      const halfHeight = world.height / 2;
       let x = 0;
       let y = 0;
       const margin = 26;
 
       if (edge === 0) {
-        x = randomBetween(0, world.width);
-        y = -margin;
+        x = baseX + randomBetween(-halfWidth, halfWidth);
+        y = baseY - halfHeight - margin;
       } else if (edge === 1) {
-        x = world.width + margin;
-        y = randomBetween(0, world.height);
+        x = baseX + halfWidth + margin;
+        y = baseY + randomBetween(-halfHeight, halfHeight);
       } else if (edge === 2) {
-        x = randomBetween(0, world.width);
-        y = world.height + margin;
+        x = baseX + randomBetween(-halfWidth, halfWidth);
+        y = baseY + halfHeight + margin;
       } else {
-        x = -margin;
-        y = randomBetween(0, world.height);
+        x = baseX - halfWidth - margin;
+        y = baseY + randomBetween(-halfHeight, halfHeight);
       }
 
       world.enemies.push({
@@ -429,15 +874,78 @@
       }
     }
 
+    function updateLevelProgress(x, y) {
+      const nextLevel = Math.floor(world.score / 50) + 1;
+
+      if (nextLevel > world.level) {
+        world.level = nextLevel;
+        world.bonusTime += 8;
+        addParticles(x, y, "#79d98c", 20, 150);
+      }
+    }
+
+    function changeWeapon(weaponKey) {
+      if (!world.player || !WEAPONS[weaponKey]) return;
+      world.player.weapon = weaponKey;
+      addParticles(world.player.x, world.player.y, WEAPONS[weaponKey].particleColor, 8, 90);
+      syncStats();
+    }
+
+    function cycleWeapon() {
+      if (!world.player) return;
+      const currentIndex = WEAPON_ORDER.indexOf(world.player.weapon);
+      const nextIndex = (currentIndex + 1) % WEAPON_ORDER.length;
+      changeWeapon(WEAPON_ORDER[nextIndex]);
+    }
+
+    function spawnProjectile(player, shot, weapon) {
+      const baseAngle = Math.atan2(player.facing.y || 0, player.facing.x || 1);
+      const angle = baseAngle + shot.angle;
+      const directionX = Math.cos(angle);
+      const directionY = Math.sin(angle);
+
+      world.bullets.push({
+        x: player.x + directionX * 24,
+        y: player.y + directionY * 24,
+        dx: directionX * shot.speed,
+        dy: directionY * shot.speed,
+        radius: shot.radius,
+        life: shot.life,
+        hitsLeft: shot.hitsLeft,
+        color: weapon.color,
+        glow: weapon.glow,
+        trail: weapon.trail,
+        particleColor: weapon.particleColor
+      });
+    }
+
+    function shootWeapon(player) {
+      const weapon = WEAPONS[player.weapon];
+
+      weapon.shots.forEach((shot) => {
+        spawnProjectile(player, shot, weapon);
+      });
+
+      addParticles(
+        player.x + player.facing.x * 18,
+        player.y + player.facing.y * 18,
+        weapon.particleColor,
+        weapon.name === "Plasma" ? 10 : 6,
+        weapon.name === "Espalhadora" ? 120 : 90
+      );
+
+      player.shootCooldown = weapon.cooldown;
+    }
+
     function updatePlayer(delta) {
       const player = world.player;
       let moveX = 0;
       let moveY = 0;
 
-      if (world.keys.ArrowUp || world.keys.w || world.keys.W) moveY -= 1;
-      if (world.keys.ArrowDown || world.keys.s || world.keys.S) moveY += 1;
-      if (world.keys.ArrowLeft || world.keys.a || world.keys.A) moveX -= 1;
-      if (world.keys.ArrowRight || world.keys.d || world.keys.D) moveX += 1;
+      if (keyPressed("ArrowUp")) moveY -= 1;
+      if (keyPressed("ArrowDown")) moveY += 1;
+      if (keyPressed("ArrowLeft")) moveX -= 1;
+      if (keyPressed("ArrowRight")) moveX += 1;
 
       const magnitude = Math.hypot(moveX, moveY) || 1;
       moveX /= magnitude;
@@ -450,7 +958,7 @@
 
       let speed = player.speed;
 
-      if ((world.keys[" "] || world.keys.Spacebar) && player.turboCooldown <= 0) {
+      if (keyPressed("b", "B") && player.turboCooldown <= 0) {
         player.turboTrail = 0.22;
         player.turboCooldown = 0.85;
       }
@@ -461,15 +969,19 @@
 
       player.x += moveX * speed * delta;
       player.y += moveY * speed * delta;
-      player.x = clamp(player.x, player.radius, world.width - player.radius);
-      player.y = clamp(player.y, player.radius, world.height - player.radius);
+      updateCamera();
 
       player.turboCooldown = Math.max(0, player.turboCooldown - delta);
+      player.shootCooldown = Math.max(0, player.shootCooldown - delta);
       player.turboTrail = Math.max(0, player.turboTrail - delta);
       player.invulnerable = Math.max(0, player.invulnerable - delta);
 
       if (player.turboTrail > 0) {
         addParticles(player.x, player.y, "#ffd166", 1, 60);
+      }
+
+      if (keyPressed("a", "A") && player.shootCooldown <= 0) {
+        shootWeapon(player);
       }
     }
 
@@ -497,10 +1009,50 @@
           addParticles(player.x, player.y, "#ff6b57", 16, 180);
 
           if (world.health <= 0) {
-            endGame("Fim de jogo!", "Os monstros dominaram a arena. Pressione Enter para tentar de novo.");
+            endGame("Fim de jogo!", "Os monstros dominaram a arena. Pressione Enter ou Start para tentar de novo.");
           }
         }
       });
+    }
+
+    function updateBullets(delta) {
+      world.bullets = world.bullets.filter((bullet) => {
+        bullet.x += bullet.dx * delta;
+        bullet.y += bullet.dy * delta;
+        bullet.life -= delta;
+
+        return bullet.life > 0 && distanceToPlayer(bullet.x, bullet.y) < Math.max(world.width, world.height) * 1.8;
+      });
+    }
+
+    function updateBulletHits() {
+      const remainingBullets = [];
+      const aliveEnemies = new Array(world.enemies.length).fill(true);
+
+      world.bullets.forEach((bullet) => {
+        for (let index = 0; index < world.enemies.length; index += 1) {
+          if (bullet.hitsLeft <= 0) break;
+          if (!aliveEnemies[index]) continue;
+
+          const enemy = world.enemies[index];
+          const hitDistance = Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y);
+
+          if (hitDistance < bullet.radius + enemy.radius) {
+            aliveEnemies[index] = false;
+            bullet.hitsLeft -= 1;
+            world.score += 20;
+            updateLevelProgress(enemy.x, enemy.y);
+            addParticles(enemy.x, enemy.y, bullet.particleColor, 20, 190);
+          }
+        }
+
+        if (bullet.hitsLeft > 0) {
+          remainingBullets.push(bullet);
+        }
+      });
+
+      world.bullets = remainingBullets;
+      world.enemies = world.enemies.filter((_, index) => aliveEnemies[index]);
     }
 
     function updateCollectibles() {
@@ -513,14 +1065,27 @@
         if (hitDistance < star.radius + player.radius) {
           world.score += 10;
           addParticles(star.x, star.y, "#ffd166", 14, 140);
+          updateLevelProgress(player.x, player.y);
 
-          const nextLevel = Math.floor(world.score / 50) + 1;
-          if (nextLevel > world.level) {
-            world.level = nextLevel;
-            world.bonusTime += 8;
-            addParticles(player.x, player.y, "#79d98c", 20, 150);
-          }
+          return false;
+        }
 
+        return true;
+      });
+    }
+
+    function updateWeaponDrops(delta) {
+      const player = world.player;
+
+      world.weaponDrops = world.weaponDrops.filter((drop) => {
+        drop.bob += delta * 3;
+        drop.spin += delta * 2;
+
+        const hitDistance = Math.hypot(drop.x - player.x, drop.y - player.y);
+        if (hitDistance < drop.radius + player.radius) {
+          changeWeapon(drop.weapon);
+          player.shootCooldown = 0;
+          addParticles(drop.x, drop.y, WEAPONS[drop.weapon].particleColor, 18, 140);
           return false;
         }
 
@@ -540,7 +1105,7 @@
 
     function endGame(title, text) {
       world.state = "ended";
-      showOverlay(title, text);
+      showOverlay(title, text, "Jogar de novo");
     }
 
     function update(delta, now) {
@@ -548,24 +1113,30 @@
         return;
       }
 
-      world.remainingTime = 60 - (now - world.startTime) / 1000 + world.bonusTime;
+      world.remainingTime = MATCH_DURATION - (now - world.startTime) / 1000 + world.bonusTime;
 
       if (world.remainingTime <= 0) {
-        endGame("Tempo esgotado!", "Você segurou a arena até o relógio zerar. Pressione Enter para jogar outra vez.");
         world.remainingTime = 0;
+        endGame("Tempo esgotado!", "A 1 hora acabou. Pressione Enter ou Start para jogar outra vez.");
       }
 
       world.enemyTimer += delta;
       world.collectibleTimer += delta;
+      world.weaponDropTimer += delta;
       world.particleTimer += delta;
       world.hitFlash = Math.max(0, world.hitFlash - delta);
 
       updatePlayer(delta);
       updateEnemies(delta);
+      updateBullets(delta);
+      updateBulletHits();
       updateCollectibles();
+      updateWeaponDrops(delta);
+      pruneFarObjects();
       updateParticles(delta);
 
       const maxStars = 5;
+      const maxWeaponDrops = 5;
       const spawnRate = Math.max(0.85, 2.1 - world.level * 0.12);
       const enemyRate = Math.max(0.7, 2.2 - world.level * 0.15);
 
@@ -579,6 +1150,11 @@
         spawnEnemy();
       }
 
+      if (world.weaponDrops.length < maxWeaponDrops && world.weaponDropTimer >= 4.5) {
+        world.weaponDropTimer = 0;
+        spawnWeaponDrop();
+      }
+
       syncStats();
     }
 
@@ -586,23 +1162,26 @@
       ctx.clearRect(0, 0, world.width, world.height);
 
       const gradient = ctx.createLinearGradient(0, 0, 0, world.height);
-      gradient.addColorStop(0, "#17304c");
-      gradient.addColorStop(1, "#0b1421");
+      gradient.addColorStop(0, "#7f9558");
+      gradient.addColorStop(1, "#52633f");
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, world.width, world.height);
 
       ctx.save();
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+      ctx.strokeStyle = "rgba(239, 245, 219, 0.08)";
       ctx.lineWidth = 1;
+      const gridSize = 64;
+      const offsetX = ((-world.camera.x % gridSize) + gridSize) % gridSize;
+      const offsetY = ((-world.camera.y % gridSize) + gridSize) % gridSize;
 
-      for (let x = 0; x <= world.width; x += 40) {
+      for (let x = offsetX; x <= world.width; x += gridSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x, world.height);
         ctx.stroke();
       }
 
-      for (let y = 0; y <= world.height; y += 40) {
+      for (let y = offsetY; y <= world.height; y += gridSize) {
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(world.width, y);
@@ -610,20 +1189,21 @@
       }
       ctx.restore();
 
-      for (let i = 0; i < 28; i += 1) {
-        const offset = (now * 0.02 + i * 71) % world.width;
-        const y = (i * 19) % world.height;
-        ctx.fillStyle = "rgba(255, 245, 220, 0.18)";
-        ctx.fillRect(offset, y, 2, 2);
+      for (let i = 0; i < 40; i += 1) {
+        const x = (((i * 83) - world.camera.x * 0.18) % (world.width + 120) + (world.width + 120)) % (world.width + 120) - 60;
+        const y = (((i * 47) - world.camera.y * 0.18) % (world.height + 120) + (world.height + 120)) % (world.height + 120) - 60;
+        ctx.fillStyle = "rgba(255, 245, 220, 0.16)";
+        ctx.fillRect(x, y, 2, 2);
       }
     }
 
     function drawPlayer() {
       const player = world.player;
       if (!player) return;
+      const screen = worldToScreen(player.x, player.y);
 
       ctx.save();
-      ctx.translate(player.x, player.y);
+      ctx.translate(screen.x, screen.y);
 
       if (player.invulnerable > 0 && Math.floor(player.invulnerable * 12) % 2 === 0) {
         ctx.globalAlpha = 0.45;
@@ -648,6 +1228,9 @@
       ctx.closePath();
       ctx.fill();
 
+      ctx.fillStyle = WEAPONS[player.weapon].color;
+      ctx.fillRect(8, -3, 16, 6);
+
       ctx.fillStyle = "#fff7e8";
       ctx.beginPath();
       ctx.arc(4, 0, 5, 0, Math.PI * 2);
@@ -657,8 +1240,10 @@
 
     function drawEnemies(now) {
       world.enemies.forEach((enemy) => {
+        if (!isVisible(enemy.x, enemy.y, enemy.radius)) return;
+        const screen = worldToScreen(enemy.x, enemy.y);
         ctx.save();
-        ctx.translate(enemy.x, enemy.y);
+        ctx.translate(screen.x, screen.y);
         const pulse = Math.sin(now * 0.004 + enemy.wobble) * 3;
 
         const glow = ctx.createRadialGradient(0, 0, 5, 0, 0, enemy.radius + 18);
@@ -683,10 +1268,83 @@
       });
     }
 
+    function drawBullets() {
+      world.bullets.forEach((bullet) => {
+        if (!isVisible(bullet.x, bullet.y, bullet.radius, 40)) return;
+        const screen = worldToScreen(bullet.x, bullet.y);
+        ctx.save();
+
+        ctx.strokeStyle = bullet.trail;
+        ctx.lineWidth = Math.max(3, bullet.radius * 0.9);
+        ctx.beginPath();
+        ctx.moveTo(screen.x, screen.y);
+        ctx.lineTo(screen.x - bullet.dx * 0.025, screen.y - bullet.dy * 0.025);
+        ctx.stroke();
+
+        const glow = ctx.createRadialGradient(screen.x, screen.y, 1, screen.x, screen.y, 18);
+        glow.addColorStop(0, bullet.glow);
+        glow.addColorStop(1, "rgba(255, 179, 71, 0)");
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(screen.x, screen.y, 18, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = bullet.color;
+        ctx.beginPath();
+        ctx.arc(screen.x, screen.y, bullet.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+
+    function drawWeaponDrops(now) {
+      world.weaponDrops.forEach((drop) => {
+        if (!isVisible(drop.x, drop.y, drop.radius, 40)) return;
+        const weapon = WEAPONS[drop.weapon];
+        const lift = Math.sin(now * 0.004 + drop.bob) * 5;
+        const weaponLetter = weapon.name.charAt(0).toUpperCase();
+        const screen = worldToScreen(drop.x, drop.y);
+
+        ctx.save();
+        ctx.translate(screen.x, screen.y + lift);
+        ctx.rotate(now * 0.0018 + drop.spin);
+
+        const glow = ctx.createRadialGradient(0, 0, 4, 0, 0, 30);
+        glow.addColorStop(0, weapon.glow);
+        glow.addColorStop(1, "rgba(255, 255, 255, 0)");
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, 0, 30, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "rgba(12, 21, 33, 0.92)";
+        ctx.strokeStyle = weapon.color;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(0, -18);
+        ctx.lineTo(18, 0);
+        ctx.lineTo(0, 18);
+        ctx.lineTo(-18, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.rotate(-(now * 0.0018 + drop.spin));
+        ctx.fillStyle = weapon.color;
+        ctx.font = "bold 16px Trebuchet MS";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(weaponLetter, 0, 1);
+        ctx.restore();
+      });
+    }
+
     function drawCollectibles(now) {
       world.stars.forEach((star) => {
+        if (!isVisible(star.x, star.y, star.radius, 40)) return;
+        const screen = worldToScreen(star.x, star.y);
         ctx.save();
-        ctx.translate(star.x, star.y);
+        ctx.translate(screen.x, screen.y);
         ctx.rotate(now * 0.001 + star.glow);
         const scale = 1 + Math.sin(star.glow) * 0.08;
         ctx.scale(scale, scale);
@@ -717,11 +1375,13 @@
 
     function drawParticles() {
       world.particles.forEach((particle) => {
+        if (!isVisible(particle.x, particle.y, particle.radius, 30)) return;
+        const screen = worldToScreen(particle.x, particle.y);
         ctx.save();
         ctx.globalAlpha = Math.max(0, particle.life);
         ctx.fillStyle = particle.color;
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        ctx.arc(screen.x, screen.y, particle.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       });
@@ -738,18 +1398,20 @@
     function drawMiniGuide() {
       ctx.save();
       ctx.fillStyle = "rgba(12, 21, 33, 0.48)";
-      ctx.fillRect(18, world.height - 54, 238, 34);
+      ctx.fillRect(18, world.height - 54, 430, 34);
       ctx.strokeStyle = "rgba(255, 240, 215, 0.16)";
-      ctx.strokeRect(18, world.height - 54, 238, 34);
+      ctx.strokeRect(18, world.height - 54, 430, 34);
       ctx.fillStyle = "rgba(255, 246, 230, 0.86)";
-      ctx.font = "16px Trebuchet MS";
-      ctx.fillText("WASD/Setas = mover   Espaço = turbo", 28, world.height - 31);
+      ctx.font = "15px Trebuchet MS";
+      ctx.fillText("Setas move  A atira  B turbo  C troca arma", 28, world.height - 31);
       ctx.restore();
     }
 
     function render(now) {
       drawBackground(now);
       drawCollectibles(now);
+      drawWeaponDrops(now);
+      drawBullets();
       drawEnemies(now);
       drawParticles();
       drawPlayer();
@@ -765,11 +1427,38 @@
       requestAnimationFrame(loop);
     }
 
+    function bindHoldButton(button) {
+      const key = button.dataset.holdKey;
+
+      const release = () => {
+        setTouchKey(key, false);
+        button.classList.remove("pressed");
+      };
+
+      button.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        setTouchKey(key, true);
+        button.classList.add("pressed");
+
+        if (button.setPointerCapture) {
+          button.setPointerCapture(event.pointerId);
+        }
+      });
+
+      button.addEventListener("pointerup", release);
+      button.addEventListener("pointercancel", release);
+      button.addEventListener("lostpointercapture", release);
+    }
+
     window.addEventListener("keydown", (event) => {
       world.keys[event.key] = true;
 
       if (event.key === "Enter") {
         resetGame();
+      }
+
+      if ((event.key === "c" || event.key === "C") && !event.repeat) {
+        cycleWeapon();
       }
 
       if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(event.key)) {
@@ -781,9 +1470,32 @@
       world.keys[event.key] = false;
     });
 
+    window.addEventListener("blur", () => {
+      world.keys = {};
+      clearTouchKeys();
+    });
+
+    startButton.addEventListener("click", () => {
+      resetGame();
+    });
+
+    startTouchButton.addEventListener("click", () => {
+      resetGame();
+    });
+
+    selectTouchButton.addEventListener("click", () => {
+      cycleWeapon();
+    });
+
+    cycleButton.addEventListener("click", () => {
+      cycleWeapon();
+    });
+
+    holdButtons.forEach(bindHoldButton);
+
     showOverlay(
       "Pronto para jogar?",
-      "Colete estrelas, fuja dos monstros e sobreviva o máximo que puder. Pressione Enter para começar."
+      "Colete estrelas, explore a arena infinita, mova nas setas, use A para atirar, B para turbo e C para trocar arma. Pressione Enter ou toque em Comecar."
     );
     syncStats();
     requestAnimationFrame(loop);
